@@ -1,0 +1,24 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+node_modules/
+
+# Never commit real community exports, generated databases, reports, or media.
+private/
+data/
+exports/
+/circle export/
+/circle-export/
+*.sqlite
+*.sqlite3
+*.db
+*.sql.gz
+
+# Local credentials and tool state.
+.env
+.env.*
+!.env.example
+.dev.vars
+.wrangler/
