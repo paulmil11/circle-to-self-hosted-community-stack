@@ -2,7 +2,9 @@
 
 Build a community platform you control. This repo shares the Circle migration tools, database schema, and implementation guides behind my [Pathless Path Community](https://community.pathlesspath.com).
 
-I built it to help people find one another: someone nearby, someone asking a similar question, someone to make something with. I pay about **$25.38 a month** for Cloudflare and Resend combined.
+My goal is to use AI and the platform to create a serendipity machine, so people can find the others and do amazing things with their lives. That might start with someone nearby, someone asking a similar question, or someone to make something with.
+
+I pay about **$25.38 a month** for Cloudflare and Resend combined.
 
 The repo includes a working migration toolkit and guides for building your own app. The production interface, authentication, email sender, and course content are not included. Here, self-hosted means you control the application and data in your own provider accounts; my setup runs on managed Cloudflare services.
 

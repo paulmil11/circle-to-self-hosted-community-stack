@@ -4,7 +4,7 @@
 
 I always wanted a community where the most important thing was connecting the nodes inside it. I wasn't trying to build a top-down thing for me to sell and monetize. I wanted to help people find the others.
 
-The weekly email helps. Someone has moved to a new city. Someone has shared a link in the chat, made something, offered a conversation, or decided to host an event. These are small signals, but they can become a friendship, a collaboration, or the nudge someone needed.
+The goal is to use AI and the platform as a serendipity machine: help people find the others and do amazing things with their lives. The weekly email puts that idea into practice. Someone has moved to a new city. Someone has shared a link in the chat, made something, offered a conversation, or decided to host an event. These are small signals, but they can become a friendship, a collaboration, or the nudge someone needed.
 
 With the new platform, I can gather what's happening across the community each week and turn it into a useful letter. More things are happening, and they take much less of my hands-on support to happen. That feels like the best way to run a platform or community: most of the value is accruing beyond the platform itself.
 
