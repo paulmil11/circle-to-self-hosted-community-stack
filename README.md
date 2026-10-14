@@ -1,8 +1,85 @@
-# Circle to Self-Hosted Community Stack
+# Circle to self-hosted community stack
 
-The public, data-safe reference behind the [Pathless Path Community](https://community.pathlesspath.com): a small, independently operated platform for helping people find one another.
+Build a community platform you control. This repo shares the Circle migration tools, database schema, and implementation guides behind my [Pathless Path Community](https://community.pathlesspath.com).
 
-Move from Circle to your own community platform with a Python migration toolkit, a portable SQLite/Cloudflare D1 schema, and guides for member directories, courses, and weekly community emails. Here, “self-hosted” means you control the application and data in your own provider accounts; the reference setup uses managed Cloudflare services, not a turnkey server you install.
+I built it to help people find one another: someone nearby, someone asking a similar question, someone to make something with. I pay about **$25.38 a month** for Cloudflare and Resend combined.
+
+The repo includes a working migration toolkit and guides for building your own app. The production interface, authentication, email sender, and course content are not included. Here, self-hosted means you control the application and data in your own provider accounts; my setup runs on managed Cloudflare services.
+
+[Start with the migration guide](docs/migrate-from-circle.md) · [Add a course portal](docs/course-portal.md) · [Review production practices](docs/best-practices.md)
+
+## The weekly email helps people find each other
+
+Each week, the platform gathers member activity: new locations, links shared in the group, projects, conversation offers, and upcoming events. I review the draft, choose what to include, and add a personal introduction. The result is a letter I craft for this community, with direct links that make it easy to follow up.
+
+In [Rolling my own community](https://newsletter.pathlesspath.com/p/rolling-my-own-community-328), I described the information I wanted to surface:
+
+> "what people are doing, what they are sharing, and who they might want to connect with."
+
+A conversation offer can disappear in a busy chat. A useful link can go unread. The email gives these things another chance to reach someone who cares. A member notices a neighbor, joins a reading hour, or finds a person to exchange drafts with. I don't have to arrange every introduction.
+
+That's the magic for me: more is happening with less of my hands-on support. Most of the value is accruing beyond the platform itself.
+
+![Example weekly email with nearby members, events, projects, and Field Notes](docs/screenshots/member-email.png)
+
+This example uses the actual weekly email template with fictional names and activity. [How I collect, edit, and send the weekly letter](docs/weekly-member-signals.md).
+
+### From an update to a connection
+
+The email makes people easier to notice. They decide what happens next. These fictional examples show the kinds of connections it can help start:
+
+```mermaid
+flowchart LR
+    Activity["Members share locations,<br/>events, projects, and offers"] --> Email["Weekly email<br/>I review and add context"]
+    Email -.-> Morgan["Morgan"]
+    Email -.-> Sage["Sage"]
+    Email -.-> Casey["Casey"]
+    Morgan ---|"Coffee in Lisbon"| Avery["Avery"]
+    Sage ---|"Reading hour"| Robin["Robin"]
+    Casey ---|"Exchange drafts"| Jules["Jules"]
+```
+
+## What is here
+
+The screenshots show the platform these guides grew out of. Member profiles, messages, activity, and course answers are fictional examples. The map is from my community and shows aggregate locations without member names.
+
+### A homepage with a community feed
+
+See what people are sharing, find a gathering, and discover someone you might enjoy meeting.
+
+![Community homepage with recent activity and suggested people](docs/screenshots/community-home.png)
+
+### Direct messages
+
+Send someone a note and keep the conversation going. Members can manage message notifications and block unwanted contact.
+
+![A fictional direct message conversation sparked by the weekly email](docs/screenshots/community-messages.png)
+
+### A wall on each profile
+
+Leave a message that other community members can see: a thank-you, a follow-up, or a reason to reconnect.
+
+![Profile wall with fictional messages from community members](docs/screenshots/community-wall.png)
+
+### A map to find people nearby
+
+Browse by city or explore the map. Members choose whether to share their location.
+
+![Member directory map with worldwide clusters and a city list](docs/screenshots/community-map.png)
+
+### Courses with video and a notebook
+
+Watch a lesson, move through the course, and keep reflections alongside it. This capture includes an actual Reinvent course video and a fictional learner's answer.
+
+![Reinvent course playing a real lesson beside a fictional learner notebook](docs/screenshots/course-video.png)
+
+### Exercises people can work through
+
+The values inventory lets learners choose what matters in their personal and working lives, then reflect on the choices. A course can include tools like this alongside video lessons.
+
+![Values inventory with module navigation and a fictional learner notebook](docs/screenshots/course-values.png)
+
+[See the full gallery](docs/screenshots.md), including the directory, curiosity conversations, shared bookshelf, and notebook review. The [course portal guide](docs/course-portal.md) covers access, video, progress, and private notes.
 
 ## A note from Paul
 
@@ -10,19 +87,19 @@ If you are finding this and looking for the final encouragement to build your ow
 
 I think building your own platforms is very important to being able to serve people digitally. Standardized online platforms flatten our experiences. Creating your own weird portal can help you stay energized about the people you want to connect with, and help you do interesting things in a cheap or simple way.
 
-I always wanted a community where the most important thing was connecting the nodes inside it. Something in the spirit of “finding the others,” rather than a top-down thing for me to sell and monetize. The weekly member signal email is a big part of that: it helps people notice who has moved somewhere new, shared something interesting in the chat, offered a conversation, or decided to host an event.
+I always wanted a community where the most important thing was connecting the nodes inside it. I wasn't trying to build a top-down thing for me to sell and monetize. I wanted to help people find the others.
 
-With the new platform, more of this is happening with much less of my hands-on support. That feels like the best way to run a community. Most of the value is accruing beyond the platform itself.
+That shaped the features. As I explain in [the newsletter](https://newsletter.pathlesspath.com/p/rolling-my-own-community-328), I wanted more ways for members to connect and more reasons for them to feel encouraged on their own paths. Travel plans help people meet in person. Curiosity conversations give an open invitation a lasting home. Field Notes make space for slower contributions.
 
 ## Want to build your own?
 
 Here's my suggested approach:
 
-1. **Ask for your data.** Email Circle, or whatever platform you're using, and ask for an export of your community's data.
-2. **Build something that feels like yours.** Give Codex or Claude Code access to the export in a private workspace. Ask it to help you spin up a cool community, and have it ask you questions about what you actually want: how people should connect, which features matter, and the designs or templates you like.
-3. **See if it excites you.** If it does, keep going. Build it, try it, and make sure people can use it. Then think about cancelling the old platform.
+1. Email Circle, or whatever platform you're using, and ask for your community's data.
+2. Give Codex or Claude Code access to the export in a private workspace. Ask it to build a community and to ask you questions about what you actually want: how people should connect, which features matter, and the designs or templates you like.
+3. See if it excites you. If it does, keep building and try it with a few members. Think about cancelling the old platform once the new one works.
 
-You can start with a prompt like this:
+You can start with this prompt:
 
 ```text
 I want to build my own community platform using this export. Ask me questions
@@ -34,44 +111,24 @@ data private and use fictional people in demos and screenshots. Help me
 figure out what needs to work before I invite members or cancel my old platform.
 ```
 
-The [migration playbook](docs/migrate-from-circle.md) gives you the practical checks when you're ready. You don't have to decide to leave before you've made something you want to keep building.
-
-## What is here
-
-This repository is a reference architecture and a working Circle migration toolkit. It shows how I use:
-
-- Cloudflare Pages and Functions for the member-facing portal
-- Cloudflare D1 (SQLite) as the community system of record
-- Cloudflare R2 for member-owned media
-- Resend for magic links and community email
-- Stripe for paid access and entitlements
-- simple, exportable tables for profiles, spaces, tags, preferences, and access
-
-This is a working migration toolkit plus implementation guides, not a deployable copy of the community app. It includes sanitized screenshots of the real interface with fictional member data and course answers. Production UI source, private member records, avatars, course media, email lists, credentials, and historical community posts remain private.
-
-![Community directory with fictional members](docs/screenshots/community-directory.png)
-
-[See the community and course screenshots](docs/screenshots.md).
-
 ## What it costs me
 
-As reported by Paul in October 2026, Cloudflare costs about **$5.38 per month** and Resend costs about **$20 per month**: approximately **$25.38 per month combined**.
+In October 2026, I pay about **$5.38 per month for Cloudflare** and **$20 per month for Resend**: roughly **$25.38 combined**.
 
-These are my running costs for those two services, not a vendor quote or an all-inclusive budget for someone else's platform. Payment processing, domains, video hosting, other services, and your time are separate where applicable. Usage and pricing can change.
+Those are my costs for those two services. Your usage will differ; budget separately for domains, video hosting, payment processing, and maintenance.
 
-## What you can use
+## What you can build with this repo
 
-- [`docs/architecture.md`](docs/architecture.md) explains the setup and the decisions behind it.
-- [`docs/best-practices.md`](docs/best-practices.md) covers current deployment, authentication, privacy, billing, email, and recovery practices.
-- [`docs/course-portal.md`](docs/course-portal.md) walks through adding courses, protected media, progress, and a private learner notebook.
-- [`docs/weekly-member-signals.md`](docs/weekly-member-signals.md) explains the weekly email, Paul's editorial role, and the philosophy of connecting members.
-- [`docs/screenshots.md`](docs/screenshots.md) shows the interface and explains how the captures were sanitized.
-- [`docs/migrate-from-circle.md`](docs/migrate-from-circle.md) is the end-to-end Circle exit and cutover playbook.
-- [`schema/community.sql`](schema/community.sql) is a portable SQLite/D1 data model.
-- [`scripts/import_circle.py`](scripts/import_circle.py) preserves Circle CSV rows and normalizes member data without overwriting member-confirmed profile fields.
-- [`scripts/export_d1_sql.py`](scripts/export_d1_sql.py) creates a reviewable SQL import for Cloudflare D1.
-- [`examples/circle-export/`](examples/circle-export/) contains synthetic—not real—Circle data for a safe rehearsal.
-- [`schema/courses.sql`](schema/courses.sql) and [`examples/course-portal/seed.sql`](examples/course-portal/seed.sql) provide an optional course data model and fictional curriculum.
+| Start here | What it provides |
+| --- | --- |
+| [Circle migration guide](docs/migrate-from-circle.md) | Export, import, reconcile, and move members in stages |
+| [Migration scripts](scripts/) and [sample exports](examples/circle-export/) | A working local rehearsal with fictional data |
+| [Community schema](schema/community.sql) | Portable SQLite/D1 tables for members, access, profiles, and preferences |
+| [Architecture](docs/architecture.md) and [production practices](docs/best-practices.md) | Hosting, sign-in, privacy, billing, email, and recovery guidance |
+| [Course portal guide](docs/course-portal.md) and [course schema](schema/courses.sql) | Curriculum, entitlements, progress, and private learner notes |
+| [Weekly email guide](docs/weekly-member-signals.md) | Collect activity, edit a useful letter, and send it reliably |
+
+My portal uses Cloudflare Pages and Functions, D1 for structured data, R2 for media, Resend for email, and Stripe for paid access. The [architecture guide](docs/architecture.md) explains how they fit together.
 
 ## Quick start
 
@@ -109,26 +166,20 @@ python3 scripts/export_d1_sql.py \
 
 The `private/` directory is ignored by Git. Keep every real export there (or outside the repository entirely).
 
-## The migration in one picture
+## Keep member-confirmed answers separate
+
+The importer preserves source rows and normalizes member data. Once a member confirms their location, bio, privacy choices, or matching preferences, a later import must leave those answers alone.
 
 ```text
-Circle CSV export              Member confirmation
-       |                              |
-       v                              v
-raw Circle tables  ----->  normalized community tables  ----->  portal features
-(immutable evidence)          (system of record)                  directory
-                                                                  field notes
-Stripe / manual access  -----> entitlements                       meetups
-Resend preferences     -----> email preferences                   matching
+Circle export → raw source rows → normalized member tables → portal
+                                      ↑
+                              member-confirmed profile
+
+Stripe / manual grants → access entitlements
+Resend preferences     → email preferences
 ```
 
-The important boundary is between imported facts and member-owned answers. A reimport may refresh a Circle avatar URL or activity count. It must not silently replace a location, bio, privacy choice, or matching preference that a member has already confirmed.
-
-## Before using this in production
-
-This is an opinionated starting point, not a hosted product. Add authentication, authorization, rate limiting, backups, deletion workflows, monitoring, and jurisdiction-appropriate privacy terms for your situation. Treat Circle exports as sensitive personal data.
-
-Start with the [migration playbook](docs/migrate-from-circle.md), rehearse on the synthetic files, and keep Circle available in read-only or fallback mode until the reconciliation checks pass. Work through the [production practices](docs/best-practices.md) before accepting real members or payments. Screenshots illustrate the interface; they do not certify that every recommended backend control is implemented in the original app.
+Before inviting members, rehearse with the sample data, reconcile access and email preferences, and test recovery. Keep the old platform available until those checks pass. The [migration guide](docs/migrate-from-circle.md) and [production practices](docs/best-practices.md) cover the steps.
 
 ## License
 

@@ -2,9 +2,9 @@
 
 A course can share the community's member identity and sign-in flow. Give it its own curriculum, access rules, progress, and private notebook. Start with one course and a clear lesson page; add discussion, cohorts, or scheduled release only when they serve the learning experience.
 
-![Reinvent lesson and fictional learner reflection](screenshots/course-reflection.png)
+![Reinvent course video beside a fictional learner notebook](screenshots/course-video.png)
 
-The screenshots show the existing Reinvent interface with fictional answers and no loaded course videos. Its current notebook saves in the browser's local storage. The server-backed persistence and protected media described below are recommendations for the platform you build, not claims about that screenshot implementation. [More screenshots and capture notes](screenshots.md).
+The screenshots show the Reinvent interface, an actual course video, and fictional learner answers. Its notebook currently saves in browser local storage. The guide below recommends server storage for cross-device use and access checks for protected media. [More screenshots and capture notes](screenshots.md).
 
 ## 1. Decide who gets access
 
@@ -98,7 +98,7 @@ WHERE l.id = ? AND c.id = ?
 
 Bind the last parameter from the verified session, never a client-supplied member ID. Validate entitlement dates when writing them. Use a separate, explicit policy for public preview lessons. For notebook reads and writes, also filter by the session member ID. A UUID and an unlisted URL are not access controls.
 
-## 4. Protect the actual content
+## 4. Protect lessons, videos, and downloads
 
 Keep paid lesson bodies, downloads, and private media references out of public HTML/JavaScript bundles and public buckets. Serve protected content through authorized endpoints. Route middleware is useful only if direct asset requests actually pass through it; check [Workers asset routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/).
 
@@ -111,6 +111,10 @@ For private downloads in R2, keep the bucket private and authorize each request 
 Keep the interface simple: module navigation, lesson content, one clear next action, and a notebook. Save text with a short debounce and an explicit saved/error state. A failed request must leave the answer available for retry. On a revision conflict, preserve the local draft and ask the learner to reconcile it rather than silently overwriting another device's work.
 
 Use server storage for cross-device progress and answers. Browser storage can hold an optional local draft; it can be cleared and is not a backup. Namespace local drafts by member, clear them on logout or account switch, and never put session tokens there. A shared browser must not show the previous learner's notebook.
+
+Exercises can store structured choices as well as free text. For a values inventory, save stable value IDs, the personal/work category, and the learner's reflections. Let people change their choices and return to them later.
+
+![Interactive values inventory with fictional selections](screenshots/course-values.png)
 
 Keep answers private by default. Exclude them from the weekly digest, directory, marketing, and analytics. Sharing a reflection with the community should be a separate member action. Decide how notebook export remains available after paid access expires; access revocation and deletion of a person's writing are different operations.
 
@@ -132,4 +136,4 @@ Try the new portal with a few test accounts before switching links. Check an act
 - Notebook export and deletion work, and a backup can be restored without losing the relationship between lessons and answers.
 - The lesson page works on a phone and with a keyboard; media has captions/transcripts and exercises have accessible controls.
 
-Build these flows with synthetic learners first. The point is to make it easier to teach and connect with people while keeping their work safe.
+Test these flows with fictional learners before importing real enrollments.

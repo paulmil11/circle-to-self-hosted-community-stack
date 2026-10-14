@@ -1,6 +1,6 @@
-# Migrating from Circle
+# Migrate members from Circle
 
-This is the playbook used to turn Circle from the community system of record into a seed export for an operator-owned portal. It is designed for a staged exit: inventory, export, rehearse, confirm, cut over, and only then close the old platform.
+Move in stages: inventory the data, export it, rehearse the import, confirm member access, and switch platforms. Cancel Circle after the new platform works.
 
 Do not cancel Circle first. A migration is complete when members can sign in, access is reconciled, durable media is owned by you, email consent is preserved, and rollback has stopped being necessary.
 
@@ -21,7 +21,7 @@ Create an inventory before touching data.
 | Paywalls/subscriptions | Stripe plus `entitlements` | Reconcile independently; never infer active billing from a profile tag alone |
 | Marketing consent | email provider plus `member_email_preferences` | Preserve unsubscribes and suppressions before sending anything |
 
-Write down what will not move. Old conversational exhaust may be better as a private archive than as a permanent feature in the new home.
+Write down what will not move. Old discussions may be more useful in a private archive than in the new feed.
 
 ## 2. Export Circle data
 
@@ -49,7 +49,7 @@ If your Circle account offers a full community export containing members, spaces
 
 Circle's [Data API documentation](https://api.circle.so/apis/data-api) notes that CSV exports are manual and do not cover every API use case. For a large or frequently changing community, use the API available to your plan or arrange an export with Circle support rather than scraping pages.
 
-### Exit-safety notes
+### Before closing the old account
 
 - Deactivation and deletion are different. Circle says deactivation retains a member's content, while deletion permanently erases profile and content. Review [Circle's removal behavior](https://help.circle.so/p/audience/member-management/removing-members-from-your-community) before cleaning up accounts.
 - Do not assume an analytics download is a content backup. It may contain aggregates or leaderboard rows rather than post bodies.
@@ -108,7 +108,7 @@ The importer:
 - preserves duplicate header names as `Header`, `Header__2`, and so on;
 - stores every raw row before normalizing it;
 - uses normalized email as the initial identity key;
-- creates stable opaque member IDs;
+- creates stable member IDs;
 - parses known space names longest-first so names containing commas survive;
 - treats tags as migration signals;
 - writes counts and non-PII warnings to the report;
@@ -215,16 +215,16 @@ Upload member-owned media to object storage and replace source URLs only after v
 
 ## 7. Cut over in stages
 
-A low-drama sequence:
+Use this sequence:
 
-1. **Private rehearsal:** operator and one technical reviewer.
-2. **Seed group:** a few members representing different access types and profile shapes.
-3. **Soft launch:** all eligible members can sign in; Circle remains available as a fallback.
-4. **Content freeze:** announce the final Circle write cutoff and run one last delta/full export.
-5. **Final reconciliation:** rerun member, billing, email, media, and count checks.
-6. **Primary-home switch:** update links, onboarding, email, and event calls to action.
-7. **Read-only/archive window:** keep Circle available long enough to handle missing data.
-8. **Cancellation:** only after exports, backups, redirects, and support communication are complete.
+1. Rehearse privately with the operator and one technical reviewer.
+2. Invite a few members with different access types and profile fields.
+3. Open sign-in to all eligible members while keeping Circle available.
+4. Announce the final Circle write cutoff and take one last export.
+5. Recheck members, billing, email preferences, media, and row counts.
+6. Update links, onboarding, email, and event invitations to the new platform.
+7. Keep a read-only archive window for resolving missing data.
+8. Cancel once exports, backups, redirects, and member communication are complete.
 
 Tell members what is happening in ordinary language: why the home is changing, what moved, what did not, how privacy works, how to sign in, and where to ask for help.
 

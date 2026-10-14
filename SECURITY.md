@@ -13,7 +13,7 @@ Before any public push:
 3. Run a secret scanner if one is available.
 4. If personal data or a secret was ever committed, remove it from history and rotate affected credentials. A later deletion commit is not sufficient.
 
-Screenshots must use synthetic identities and activity in an isolated browser with external requests blocked. Do not publish real avatars, private writing, learner answers, signed media URLs, magic links, room IDs, or admin/billing views. Review the rendered pixels as well as the staged files. See [screenshot capture notes](docs/screenshots.md).
+Create screenshots with synthetic identities and activity in an isolated browser. Block external requests except the specific public assets needed for the capture. A user-supplied image needs a separate privacy review; the published map shows aggregate locations without member names. Do not publish real avatars, private writing, learner answers, signed media URLs, magic links, room IDs, or admin/billing views. Review the rendered pixels as well as the staged files. See [screenshot capture notes](docs/screenshots.md).
 
 Deterministic import IDs are not anonymization. The community key is not a secret and a guessed email can reproduce a member ID. Server-side authorization is still required for every protected resource.
 

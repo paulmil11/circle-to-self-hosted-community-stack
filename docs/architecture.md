@@ -1,10 +1,10 @@
 # Architecture
 
-## Product posture
+## A small app with portable data
 
-The Pathless Path portal is meant to feel like a member home, not an enterprise community suite. The technology follows that constraint: a static-first web app, small server functions, and a relational database that can be exported with ordinary tools.
+The Pathless Path portal uses a static web interface, small server functions, and a relational database that can be exported with ordinary tools.
 
-Circle was treated as seed data. The operator-owned database is now the durable member layer for profiles, onboarding, matching, events, email preferences, billing access, books, and courses.
+Circle supplied the initial data. The community database now stores profiles, onboarding, matching, events, email preferences, billing access, books, and courses.
 
 ## Stack
 
@@ -19,7 +19,7 @@ Circle was treated as seed data. The operator-owned database is now the durable 
 | Billing | Stripe | Billing stays an entitlement source, not the member profile database |
 | Informal chat | WhatsApp | Used as a complementary high-frequency channel, not the system of record |
 
-These providers are replaceable. The durable design is the division of responsibilities and the portable data model, not a particular vendor.
+The schema keeps member data independent of the hosting, email, and billing providers.
 
 The table describes the existing portal. For a new build, also evaluate Workers with Static Assets; see the [current production practices](best-practices.md) for deployment, route protection, backups, and email operations. Paul's reported October 2026 costs are about $5.38/month for Cloudflare and $20/month for Resend, approximately $25.38 combined for those services.
 
@@ -78,7 +78,7 @@ Imported Circle locations are prefill suggestions. A member appears in a directo
 
 ## Operational pattern
 
-The operating loop is intentionally small:
+The weekly workflow:
 
 - member activity is stored in first-party tables;
 - a weekly digest script collects candidate signals;
@@ -87,7 +87,7 @@ The operating loop is intentionally small:
 - delivery failures update the preference record and alert the operator;
 - admin changes write an audit note rather than silently changing access.
 
-The system optimizes for legibility. At small-community scale, a reviewable SQL file and a clear runbook are usually better than an elaborate data pipeline.
+Keep exports readable and recovery steps documented so someone else can maintain the platform.
 
 The [weekly member signal email](weekly-member-signals.md) is an example of this philosophy in practice. It gathers activity that can help members find one another, while Paul shapes the letter. Its purpose is to make conversations, projects, and gatherings easier, including those that happen beyond the platform.
 

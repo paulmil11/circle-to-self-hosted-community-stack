@@ -8,7 +8,7 @@ Start with sign-in, a member-controlled profile, a directory, and one useful way
 
 Paul reports roughly $5.38/month for Cloudflare and $20/month for Resend in October 2026. Treat those as one small platform's actual costs. Set usage alerts for your own account and budget separately for video, payments, domains, and maintenance where relevant.
 
-## Choose hosting deliberately
+## Choose where the app runs
 
 The existing portal uses Pages and Pages Functions. For a new Cloudflare build, evaluate Workers with Static Assets: one deployment can serve the interface and APIs, with access to scheduling and other Workers features. Keep an existing Pages app if it meets your needs; a migration is a separate project with route, binding, and custom-domain checks. [Cloudflare's Pages-to-Workers guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/) describes the differences.
 
@@ -16,7 +16,7 @@ A static asset can be served before your Worker runs. Keep paid lesson bodies an
 
 Keep development, preview, and production databases, buckets, secrets, and email settings separate. Previews should use synthetic records and a test recipient allowlist. Pin your tool dependencies in a lockfile, commit the deployment configuration, set a deliberate compatibility date, and test dependency or runtime upgrades before deploying. Deploying the interface must not silently run a production migration or send email.
 
-## Make access checks boring and consistent
+## Check access on every request
 
 Use a maintained authentication implementation when possible. For email links, return the same public response whether an address is eligible or unknown. Generate random tokens, store hashes, enforce short expiry, and consume a token atomically so two requests cannot both redeem it. Rate-limit requests independently by account and network source. Build links from an approved origin and allowlist local return paths. Keep tokens out of logs, analytics, and referrers. Email security scanners may follow links: consider a confirmation step before redemption. These recommendations adapt the token handling principles in [OWASP's recovery guidance](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html).
 
@@ -55,7 +55,7 @@ Keep sign-in and essential account mail separate from digests and announcements.
 
 For the weekly email, gather evidence, write a useful letter, preview it, and approve the exact content before sending. Store a send journal so a timeout cannot trigger a duplicate broadcast. A partial send needs reconciliation with the provider. The [member signal guide](weekly-member-signals.md) explains the full workflow.
 
-## Check the outcomes that matter
+## Test failures before launch
 
 Before launch, exercise expired and reused login links, revoked access, cross-member reads/writes, duplicate payment events, failed email delivery, hidden locations, and a real restore. Test keyboard navigation, visible focus, readable form labels, narrow screens, and reduced motion. Courses also need captions or transcripts and an accessible alternative to interactive exercises.
 
