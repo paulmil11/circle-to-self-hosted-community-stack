@@ -21,4 +21,6 @@ exports/
 .env.*
 !.env.example
 .dev.vars
+.dev.vars.*
+.envrc
 .wrangler/

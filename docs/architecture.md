@@ -21,6 +21,8 @@ Circle was treated as seed data. The operator-owned database is now the durable 
 
 These providers are replaceable. The durable design is the division of responsibilities and the portable data model, not a particular vendor.
 
+The table describes the existing portal. For a new build, also evaluate Workers with Static Assets; see the [current production practices](best-practices.md) for deployment, route protection, backups, and email operations. Paul's reported October 2026 costs are about $5.38/month for Cloudflare and $20/month for Resend, approximately $25.38 combined for those services.
+
 ## Data flow
 
 ```text
@@ -51,7 +53,7 @@ Every source row is stored as JSON together with an import batch and row number.
 
 ## Identity and access
 
-Email is the initial identity key because it exists in Circle and Stripe exports. Member IDs are deterministic UUIDv5 values derived from a private community namespace plus a normalized email. That makes rehearsals and reimports stable without exposing the email in URLs.
+Email is the initial identity key because it exists in Circle and Stripe exports. The importer derives deterministic UUIDv5 member IDs from a stable community key and normalized email. This makes rehearsals repeatable, but it is not anonymization: someone who knows the community key can reproduce an ID from a guessed email. Never treat a member ID as proof of authorization. Preserve the canonical ID when an account changes email; reconcile future imports through a durable source-identity mapping instead of recreating the member.
 
 Production authentication uses one-time email links:
 
@@ -87,6 +89,12 @@ The operating loop is intentionally small:
 
 The system optimizes for legibility. At small-community scale, a reviewable SQL file and a clear runbook are usually better than an elaborate data pipeline.
 
+The [weekly member signal email](weekly-member-signals.md) is an example of this philosophy in practice. It gathers activity that can help members find one another, while Paul shapes the letter. Its purpose is to make conversations, projects, and gatherings easier, including those that happen beyond the platform.
+
+## Courses as an extension
+
+Reuse member identity and explicit course entitlements. Keep curriculum, progress, and private notebook entries separate; authorize lesson and media requests before returning protected content. The [course portal guide](course-portal.md) includes an additive schema, synthetic seed, API design, and launch checks. The screenshots show the existing Reinvent interface; its browser-local notebook is a UI example, not an implementation of the recommended server-backed storage.
+
 ## What is not in this public repository
 
-The production interface and operations contain member-authored writing, member images, benefits negotiated with partners, course materials, and community-specific editorial judgment. Publishing those would turn an infrastructure example into a member-data leak. The public repository therefore includes the reusable architecture, schema, and migration mechanics, while leaving community content private.
+The production interface and operations contain member-authored writing, member images, benefits negotiated with partners, course materials, and community-specific editorial judgment. This repository shares the architecture, schema, migration mechanics, and reviewed screenshots with fictional member data and learner answers. It does not distribute the production UI source, member content, private files, or course media.

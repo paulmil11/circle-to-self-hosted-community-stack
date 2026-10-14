@@ -21,13 +21,13 @@ Create an inventory before touching data.
 | Paywalls/subscriptions | Stripe plus `entitlements` | Reconcile independently; never infer active billing from a profile tag alone |
 | Marketing consent | email provider plus `member_email_preferences` | Preserve unsubscribes and suppressions before sending anything |
 
-Write down what will *not* move. Old conversational exhaust may be better as a private archive than as a permanent feature in the new home.
+Write down what will not move. Old conversational exhaust may be better as a private archive than as a permanent feature in the new home.
 
 ## 2. Export Circle data
 
-Circle's interface and plan features change. As of this guide's September 2026 review, the official member export flow is:
+Circle's interface and plan features change. Checked against Circle's official documentation on 14 October 2026, the member export flow is:
 
-1. Open the community name/logo menu and select **Audience**.
+1. Click **Audience** in the left sidebar, then select **Audience** to open Manage audience.
 2. Open **All** if you want the complete audience, including non-member contacts, and clear filters.
 3. Select **More → Export CSV**.
 4. Retrieve the generated export from the admin account's email.
@@ -89,7 +89,7 @@ python3 scripts/import_circle.py \
 python3 scripts/audit_import.py --db private/rehearsal.sqlite
 ```
 
-Then use a real export. `--community-key` must be stable for every run because it namespaces deterministic member IDs. Use a non-secret slug or domain; changing it produces different IDs.
+Then use a real export in a new rehearsal database. `--community-key` must be stable for every run because it namespaces deterministic member IDs. Use a non-secret slug or domain; changing it produces different IDs. These IDs are not anonymization or authorization credentials. After launch, account email changes need a durable source-identity mapping so a reimport cannot create a second identity.
 
 ```bash
 python3 scripts/import_circle.py \
@@ -99,6 +99,8 @@ python3 scripts/import_circle.py \
   --report private/import-report.json \
   --reset
 ```
+
+`--reset` deletes the destination database. Use it only for a disposable rehearsal or a deliberate rebuild before members have started editing their profiles. Omit it for a reimport into an existing database; the profile-preservation behavior applies to non-reset imports.
 
 The importer:
 
@@ -205,7 +207,7 @@ npx wrangler d1 execute your-community \
   --command "select lifecycle_status, count(*) from members group by lifecycle_status;"
 ```
 
-The export excludes raw Circle tables by default and uses `INSERT OR IGNORE`, making an accidental repeat safer. It is intended for an empty destination after the schema is applied. Add `--include-raw` only after making a deliberate privacy and retention decision; use `--replace` only if you have reviewed the foreign-key cascade consequences.
+The export excludes raw Circle tables and optional course tables by default and uses `INSERT OR IGNORE`, making an accidental repeat safer. It is intended for an empty destination after the schema is applied; ignored conflicts are not updates, so reconcile counts afterward. It omits explicit transaction wrappers for D1 compatibility and orders rows by dependency. Add `--include-raw` only after making a deliberate privacy and retention decision; use `--replace` only if you have reviewed the foreign-key cascade consequences. See the [course guide](course-portal.md) for `--include-courses`, which can include private learner answers.
 
 If the destination already contains data, export a private backup first with `npx wrangler d1 export your-community --remote --output private/pre-migration-backup.sql`. For a Pages portal, bind the resulting D1 database to the Pages Function in Wrangler or the dashboard; Cloudflare documents the current setup in [Pages bindings](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases).
 

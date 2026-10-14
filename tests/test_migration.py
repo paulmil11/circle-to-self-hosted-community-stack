@@ -164,6 +164,8 @@ class MigrationTest(unittest.TestCase):
             capture_output=True,
         )
         sql = sql_out.read_text(encoding="utf-8")
+        self.assertNotIn("BEGIN TRANSACTION;", sql)
+        self.assertNotIn("\nCOMMIT;", sql)
         self.assertIn('INSERT OR IGNORE INTO "members"', sql)
         self.assertNotIn('INTO "circle_raw_members"', sql)
         self.assertNotIn("This row is preserved but cannot become a member", sql)
@@ -173,6 +175,23 @@ class MigrationTest(unittest.TestCase):
             destination.executescript(SCHEMA.read_text(encoding="utf-8"))
             destination.executescript(sql)
             self.assertEqual(destination.execute("select count(*) from members").fetchone()[0], 2)
+            self.assertEqual(destination.execute("pragma foreign_key_check").fetchall(), [])
+        finally:
+            destination.close()
+
+    def test_raw_export_restores_source_mappings_after_members(self) -> None:
+        self.run_import(reset=True)
+        sql_out = self.tempdir / "with-raw.sql"
+        subprocess.run(
+            [sys.executable, str(EXPORTER), "--db", str(self.db), "--out", str(sql_out), "--include-raw"],
+            check=True, text=True, capture_output=True,
+        )
+        destination = sqlite3.connect(":memory:")
+        try:
+            destination.executescript(SCHEMA.read_text(encoding="utf-8"))
+            destination.executescript(sql_out.read_text(encoding="utf-8"))
+            self.assertEqual(destination.execute("select count(*) from member_import_sources").fetchone()[0], 2)
+            self.assertEqual(destination.execute("select count(*) from circle_raw_members").fetchone()[0], 3)
             self.assertEqual(destination.execute("pragma foreign_key_check").fetchall(), [])
         finally:
             destination.close()

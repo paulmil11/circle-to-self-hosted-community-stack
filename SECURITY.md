@@ -13,6 +13,10 @@ Before any public push:
 3. Run a secret scanner if one is available.
 4. If personal data or a secret was ever committed, remove it from history and rotate affected credentials. A later deletion commit is not sufficient.
 
+Screenshots must use synthetic identities and activity in an isolated browser with external requests blocked. Do not publish real avatars, private writing, learner answers, signed media URLs, magic links, room IDs, or admin/billing views. Review the rendered pixels as well as the staged files. See [screenshot capture notes](docs/screenshots.md).
+
+Deterministic import IDs are not anonymization. The community key is not a secret and a guessed email can reproduce a member ID. Server-side authorization is still required for every protected resource.
+
 ## Production checklist
 
 - Encrypt data in transit and use the hosting provider's encryption at rest.
@@ -24,3 +28,5 @@ Before any public push:
 - Implement member export, correction, and deletion requests.
 - Keep precise location private; publish only member-confirmed display locations.
 - Separate transactional authentication email from optional community marketing email.
+
+See [production practices](docs/best-practices.md), [course access and notebook handling](docs/course-portal.md), and [weekly signal sourcing and approval](docs/weekly-member-signals.md) for implementation details. These guides describe controls to build; this migration toolkit does not supply a production authentication or payment system.
